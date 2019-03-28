@@ -1,6 +1,7 @@
 const gulp = require('gulp');
 const sass = require('gulp-sass');
 const del = require('del');
+const browserSync = require('browser-sync');
 
 var paths = {
     styles: {
@@ -15,6 +16,18 @@ var paths = {
         src: './src/images/**/*.{jpg,jpeg,png}',
         dest: './dest/img/'
     }
+};
+
+function reload() {
+    browserSync.reload();
+};
+
+function serv() {
+    browserSync({
+        server: 'src'
+    });
+
+    gulp.watch('./src/*.html', reload)
 };
 
 function styles() {
@@ -36,9 +49,11 @@ const build = gulp.series(clean, gulp.parallel(styles, copy));
 // gulp.series('task1', 'taks2')    -   szeregowo
 // gulp.parallel('task3', 'task4')  -   równolegle
 
+exports.reload = reload;
+exports.serv = serv;
 exports.styles = styles;
 exports.copy = copy;
 exports.clean = clean;
 exports.build = build;
 
-exports.default = build;
+exports.default = serv;
