@@ -2,6 +2,7 @@ const gulp = require('gulp');
 const sass = require('gulp-sass');
 const del = require('del');
 const browserSync = require('browser-sync');
+const sourcemaps = require('gulp-sourcemaps');
 
 var paths = {
     html: {
@@ -47,7 +48,9 @@ function copy() {
 function styles() {
     return gulp
     .src(paths.styles.src)
+    .pipe(sourcemaps.init())
     .pipe(sass({outputStyle: 'compressed'}))
+    .pipe(sourcemaps.write())
     .pipe(gulp.dest(paths.styles.dest))
 };
 

@@ -10,7 +10,8 @@
   "license": "ISC",
   "devDependencies": {
     "browser-sync": "^2.26.3",
-    "gulp": "^4.0.0"
+    "gulp": "^4.0.0",
+    "gulp-sourcemaps": "^2.6.5"
   },
   "dependencies": {
     "del": "^4.0.0",
