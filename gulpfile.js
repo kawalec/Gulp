@@ -3,6 +3,8 @@ const sass = require('gulp-sass');
 const del = require('del');
 const browserSync = require('browser-sync');
 const sourcemaps = require('gulp-sourcemaps');
+const babel = require('gulp-babel');
+const concat = require('gulp-concat');
 
 var paths = {
     html: {
@@ -28,11 +30,11 @@ function reload() {
 };
 
 function serv() {
-    browserSync({
-        server: 'dest'
-    });
-    gulp.watch('./dest/*', reload);
-    gulp.watch('./src/**/*', build);
+    browserSync.init({
+        server: {baseDir: './dest'}
+    })
+    gulp.watch('./src/**/*', build)
+    gulp.watch('./dest/*', reload)
 };
 
 
@@ -50,27 +52,28 @@ function styles() {
     .src(paths.styles.src)
     .pipe(sourcemaps.init())
     .pipe(sass({outputStyle: 'compressed'}))
+    .pipe(concat('style.css'))
     .pipe(sourcemaps.write())
     .pipe(gulp.dest(paths.styles.dest))
 };
 
-function copyJs() {
+function babelJS() {
     return gulp
     .src(paths.scripts.src)
+    .pipe(concat('index.js'))
+    // .pipe(babel({presets: ['@babel/env']}))
     .pipe(gulp.dest(paths.scripts.dest))
 };
 
 
 
-const build = gulp.series(clean, gulp.parallel(styles, copy, copyJs));
-// gulp.series('task1', 'taks2')    -   szeregowo
-// gulp.parallel('task3', 'task4')  -   równolegle
+const build = gulp.series(clean, gulp.parallel(copy, styles, babelJS));
 
 exports.reload = reload;
 exports.serv = serv;
 exports.styles = styles;
 exports.copy = copy;
-exports.copyJs = copyJs;
+exports.babelJS = babelJS;
 exports.clean = clean;
 exports.build = build;
 
